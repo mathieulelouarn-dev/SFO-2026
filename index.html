@@ -905,7 +905,7 @@ function updateShareTexts() {
     document.getElementById('json-text').textContent='Aucune donnée.';
     return;
   }
-  const txt = '📊 SFO 2025 — Évaluations équipements\n\n'+
+  const txt = '📊 SFO 2026 — Évaluations équipements\n\n'+
     sorted.map((e,i)=>`${i+1}. ${e.name}${e.brand?' ('+e.brand+')':''}\n   Score: ${e.global.toFixed(1)}/5 | Tech: ${e.tech.toFixed(1)} | Orga: ${e.org.toFixed(1)} | Biz: ${e.biz.toFixed(1)}\n   ${[e.cat,e.dest,e.prioLabel,e.price?parseInt(e.price).toLocaleString('fr-FR')+' €':''].filter(Boolean).join(' · ')}\n   ${e.notes||''}`.trim()).join('\n\n');
   document.getElementById('share-text').textContent=txt;
   document.getElementById('json-text').textContent=JSON.stringify(savedEvals,null,2);
@@ -932,7 +932,7 @@ function exportFull() {
   const sorted = [...savedEvals].sort((a,b)=>b.global-a.global);
   const critKeys = {tech:CRITS.tech,org:CRITS.org,biz:CRITS.biz};
   let txt = '═══════════════════════════════════\n';
-  txt += 'RAPPORT SFO 2025 — ÉQUIPEMENTS\n';
+  txt += 'RAPPORT SFO 2026 — ÉQUIPEMENTS\n';
   txt += new Date().toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'\n';
   txt += '═══════════════════════════════════\n\n';
   sorted.forEach((ev,i)=>{
@@ -961,7 +961,7 @@ function exportFull() {
   const blob = new Blob([txt],{type:'text/plain;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href=url; a.download='SFO2025_evaluations.txt';
+  a.href=url; a.download='SFO2026_evaluations.txt';
   a.click();
   URL.revokeObjectURL(url);
   showToast('Rapport exporté !');
@@ -992,12 +992,12 @@ function importData() {
 }
 
 function saveToStorage() {
-  try { localStorage.setItem('sfo2025_evals', JSON.stringify(savedEvals)); } catch(e){}
+  try { localStorage.setItem('sfo2026_evals', JSON.stringify(savedEvals)); } catch(e){}
 }
 
 function loadFromStorage() {
   try {
-    const d = localStorage.getItem('sfo2025_evals');
+    const d = localStorage.getItem('sfo2026_evals');
     if(d) savedEvals = JSON.parse(d);
   } catch(e){}
 }
