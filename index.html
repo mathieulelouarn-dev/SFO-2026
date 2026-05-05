@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>SFO 2025 — Grille Équipements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --surface2: #F0EEE8;
+    --border: rgba(0,0,0,0.10);
+    --border-strong: rgba(0,0,0,0.18);
+    --text: #1A1916;
+    --text-muted: #6B6960;
+    --text-hint: #9E9B92;
+    --accent: #1A4FBF;
+    --accent-bg: #EBF0FB;
+    --tech: #1A4FBF;
+    --tech-bg: #EBF0FB;
+    --tech-light: #C5D5F5;
+    --org: #1A7A50;
+    --org-bg: #E8F5EE;
+    --org-light: #B8DFC9;
+    --biz: #9A5A00;
+    --biz-bg: #FDF2E0;
+    --biz-light: #F5D49A;
+    --danger: #C0392B;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: var(--text);
+    color: white;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .app-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .app-title { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+  .app-subtitle { font-size: 12px; opacity: 0.55; font-weight: 400; margin-top: 1px; }
+  .header-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .tab {
+    flex: 1;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab.active {
+    background: white;
+    color: var(--text);
+  }
+
+  /* MAIN */
+  .main { padding: 16px; padding-bottom: 40px; }
+
+  /* FORM SECTION */
+  .field-group { margin-bottom: 14px; }
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  input[type=text], input[type=number], select, textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { min-height: 72px; resize: vertical; line-height: 1.5; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* PRIO BUTTONS */
+  .prio-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .prio-btn {
+    padding: 11px 14px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .prio-btn .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .prio-btn.p1 .dot { background: var(--accent); }
+  .prio-btn.p2 .dot { background: var(--org); }
+  .prio-btn.p3 .dot { background: var(--text-hint); }
+  .prio-btn.selected.p1 { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+  .prio-btn.selected.p2 { background: var(--org-bg); border-color: var(--org); color: var(--org); }
+  .prio-btn.selected.p3 { background: var(--surface2); border-color: var(--border-strong); color: var(--text); }
+
+  /* SCORING CARDS */
+  .score-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .score-card-header {
+    padding: 13px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .score-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .score-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .pill-tech { background: var(--tech-bg); color: var(--tech); }
+  .pill-org { background: var(--org-bg); color: var(--org); }
+  .pill-biz { background: var(--biz-bg); color: var(--biz); }
+  .score-avg {
+    font-size: 22px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+  }
+  .avg-tech { color: var(--tech); }
+  .avg-org { color: var(--org); }
+  .avg-biz { color: var(--biz); }
+  .avg-none { color: var(--text-hint); }
+
+  /* CRITERIA ROWS */
+  .crit-row {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .crit-row:last-child { border-bottom: none; }
+  .crit-text { font-size: 14px; font-weight: 500; }
+  .crit-sub { font-size: 12px; color: var(--text-hint); margin-top: 1px; line-height: 1.4; }
+  .stars {
+    display: flex;
+    gap: 6px;
+  }
+  .star-btn {
+    flex: 1;
+    height: 40px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-hint);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .star-btn.on-tech { background: var(--tech-light); border-color: var(--tech); color: var(--tech); }
+  .star-btn.on-org { background: var(--org-light); border-color: var(--org); color: var(--org); }
+  .star-btn.on-biz { background: var(--biz-light); border-color: var(--biz); color: var(--biz); }
+
+  /* GLOBAL SCORE */
+  .global-block {
+    background: var(--text);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .global-num {
+    font-size: 52px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    color: white;
+    line-height: 1;
+    min-width: 72px;
+  }
+  .global-num.empty { color: rgba(255,255,255,0.3); font-size: 36px; }
+  .global-right { flex: 1; }
+  .global-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; font-weight: 600; }
+  .mini-bars { display: flex; flex-direction: column; gap: 6px; }
+  .mini-bar-row { display: flex; align-items: center; gap: 8px; }
+  .mini-bar-lbl { font-size: 11px; color: rgba(255,255,255,0.5); width: 32px; }
+  .mini-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.25s; }
+  .fill-tech { background: #7BA8F0; }
+  .fill-org { background: #6FC99A; }
+  .fill-biz { background: #F0C060; }
+  .mini-bar-val { font-size: 11px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.6); width: 22px; text-align: right; }
+
+  /* BUTTONS */
+  .btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: var(--text);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:active { opacity: 0.8; }
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.15s;
+  }
+  .btn-secondary:active { background: var(--surface2); }
+  .btn-danger-sm {
+    padding: 6px 10px;
+    background: none;
+    color: var(--danger);
+    border: 1px solid rgba(192,57,43,0.25);
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+  }
+
+  /* SAVED LIST */
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .list-title { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+  .clear-btn {
+    font-size: 12px;
+    color: var(--danger);
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .eval-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    position: relative;
+  }
+  .eval-card:active { border-color: var(--accent); }
+  .eval-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .eval-rank {
+    width: 26px; height: 26px;
+    background: var(--text);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .eval-name { font-size: 15px; font-weight: 600; flex: 1; line-height: 1.3; }
+  .eval-brand { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+  .eval-global-score {
+    font-size: 28px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    line-height: 1;
+  }
+  .score-great { color: var(--tech); }
+  .score-good { color: var(--org); }
+  .score-avg { color: var(--biz); }
+  .score-low { color: var(--danger); }
+  .eval-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+  .meta-tag {
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 3px 7px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .eval-scores-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .eval-score-chip {
+    flex: 1;
+    text-align: center;
+    padding: 5px 4px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .chip-tech { background: var(--tech-bg); color: var(--tech); }
+  .chip-org { background: var(--org-bg); color: var(--org); }
+  .chip-biz { background: var(--biz-bg); color: var(--biz); }
+  .eval-note {
+    font-size: 12px;
+    color: var(--text-hint);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .eval-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+  .empty-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
+  .empty-text { font-size: 14px; line-height: 1.5; }
+
+  /* SHARE PANEL */
+  .share-panel {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .share-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .share-text {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.6;
+    max-height: 160px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+  .share-actions { display: flex; gap: 8px; }
+  .share-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    border: 1.5px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .share-btn:active { background: var(--surface2); }
+  .share-btn.primary-share { background: var(--text); color: white; border-color: transparent; }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 14px;
+  }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .section-divider-text { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-hint); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 999;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-header-top">
+    <div>
+      <div class="app-title">Grille Équipements</div>
+      <div class="app-subtitle">Congrès SFO 2025 — Ophtalmologie</div>
+    </div>
+    <div class="header-badge" id="count-badge">0 éval.</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('form')">Évaluer</button>
+    <button class="tab" onclick="switchTab('list')">Classement</button>
+    <button class="tab" onclick="switchTab('share')">Partager</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- TAB: FORM -->
+  <div id="tab-form">
+
+    <!-- Identité -->
+    <div class="field-group">
+      <label class="field-label">Équipement</label>
+      <input type="text" id="eq-name" placeholder="ex: Spectralis HRA+OCT2" autocomplete="off">
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Fabricant</label>
+        <input type="text" id="eq-brand" placeholder="ex: Heidelberg" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Prix indicatif (€)</label>
+        <input type="number" id="eq-price" placeholder="ex: 75000" inputmode="numeric">
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Catégorie</label>
+        <select id="eq-cat">
+          <option value="">— Catégorie —</option>
+          <option>OCT / imagerie rétine</option>
+          <option>Rétinographe grand champ</option>
+          <option>Lampe à fente</option>
+          <option>Tonomètre</option>
+          <option>Réfractomètre</option>
+          <option>Topographe cornéen</option>
+          <option>Périmètre / champ visuel</option>
+          <option>Laser YAG / SLT</option>
+          <option>Laser photocoag.</option>
+          <option>Matériel pédiatrique</option>
+          <option>Unité de réfraction</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Destination</label>
+        <select id="eq-dest">
+          <option value="">— Box / Salle —</option>
+          <option>Box ophtalmo</option>
+          <option>Box orthoptiste</option>
+          <option>Salle imagerie</option>
+          <option>Salle laser</option>
+          <option>Usage commun</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Priorité d'acquisition</label>
+      <div class="prio-wrap">
+        <button class="prio-btn p1" onclick="setPrio(this,1)">
+          <span class="dot"></span> Tier 1 — Différenciant (rétine, pédiatrie)
+        </button>
+        <button class="prio-btn p2" onclick="setPrio(this,2)">
+          <span class="dot"></span> Tier 2 — Standard haut de gamme
+        </button>
+        <button class="prio-btn p3" onclick="setPrio(this,3)">
+          <span class="dot"></span> Tier 3 — Fonctionnel / Support
+        </button>
+      </div>
+    </div>
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-text">Notation</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <!-- Score global -->
+    <div class="global-block" id="global-block">
+      <div class="global-num empty" id="global-num">—</div>
+      <div class="global-right">
+        <div class="global-label">Score global pondéré / 5</div>
+        <div class="mini-bars">
+          <div class="mini-bar-row">
+            <span class="mini-bar-lbl">Tech</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill fill-tech" id="bar-tech" style="width:0%"></div></div>
+            <span class="mini-bar-val" id="lbl-tech">—</span>
+          </div>
+          <div class="mini-bar-row">
+            <span class="mini-bar-lbl">Orga</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill fill-org" id="bar-org" style="width:0%"></div></div>
+            <span class="mini-bar-val" id="lbl-org">—</span>
+          </div>
+          <div class="mini-bar-row">
+            <span class="mini-bar-lbl">Biz</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill fill-biz" id="bar-biz" style="width:0%"></div></div>
+            <span class="mini-bar-val" id="lbl-biz">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TECHNIQUE -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <div class="score-card-title">
+          <span class="score-pill pill-tech">TECHNIQUE · 40%</span>
+        </div>
+        <div class="score-avg avg-tech" id="avg-tech">—</div>
+      </div>
+      <div id="crit-tech-wrap"></div>
+    </div>
+
+    <!-- ORGANISATION -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <div class="score-card-title">
+          <span class="score-pill pill-org">ORGANISATION · 30%</span>
+        </div>
+        <div class="score-avg avg-org" id="avg-org">—</div>
+      </div>
+      <div id="crit-org-wrap"></div>
+    </div>
+
+    <!-- BUSINESS -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <div class="score-card-title">
+          <span class="score-pill pill-biz">BUSINESS · 30%</span>
+        </div>
+        <div class="score-avg avg-biz" id="avg-biz">—</div>
+      </div>
+      <div id="crit-biz-wrap"></div>
+    </div>
+
+    <div class="field-group" style="margin-top:14px;">
+      <label class="field-label">Notes libres / points de négociation</label>
+      <textarea id="eq-notes" placeholder="Impressions démo, nom du commercial, remises évoquées, points à creuser..."></textarea>
+    </div>
+
+    <button class="btn-primary" onclick="saveEval()">Enregistrer l'évaluation</button>
+    <button class="btn-secondary" onclick="resetForm()">Réinitialiser le formulaire</button>
+  </div>
+
+  <!-- TAB: LIST -->
+  <div id="tab-list" style="display:none;">
+    <div class="list-header">
+      <div class="list-title" id="list-count-label">0 équipement évalué</div>
+      <button class="clear-btn" onclick="clearAll()">Tout effacer</button>
+    </div>
+    <div id="eval-list-container">
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-text">Aucun équipement évalué.<br>Commencez par l'onglet "Évaluer".</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: SHARE -->
+  <div id="tab-share" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <div style="font-size:14px;font-weight:500;color:var(--text-muted);line-height:1.5;margin-bottom:16px;">
+        Copiez le résumé ci-dessous et partagez-le par WhatsApp avec vos associés pour consolider les évaluations.
+      </div>
+    </div>
+
+    <div class="share-panel">
+      <div class="share-title">Résumé à copier</div>
+      <div class="share-text" id="share-text">Aucune évaluation enregistrée.</div>
+      <div class="share-actions">
+        <button class="share-btn" onclick="copyToClipboard()">Copier</button>
+        <button class="share-btn primary-share" onclick="shareWhatsApp()">Envoyer WhatsApp</button>
+      </div>
+    </div>
+
+    <div class="share-panel">
+      <div class="share-title">Exporter en texte complet</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">
+        Rapport détaillé avec tous les critères, notes et scores pour archive ou envoi par email.
+      </div>
+      <button class="share-btn primary-share" onclick="exportFull()" style="width:100%;">Générer rapport complet</button>
+    </div>
+
+    <div class="share-panel">
+      <div class="share-title">Importer des évaluations</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">
+        Collez ici les données JSON d'un associé pour fusionner vos évaluations.
+      </div>
+      <textarea id="import-input" placeholder='Collez le JSON ici...' style="margin-bottom:10px;font-family:DM Mono,monospace;font-size:12px;"></textarea>
+      <button class="share-btn" onclick="importData()" style="width:100%;">Importer et fusionner</button>
+    </div>
+
+    <div class="share-panel">
+      <div class="share-title">Données JSON brutes</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">
+        Copiez ce JSON et envoyez-le à un associé pour qu'il importe vos évaluations.
+      </div>
+      <div class="share-text" id="json-text" style="max-height:100px;">Aucune donnée.</div>
+      <button class="share-btn" onclick="copyJson()" style="width:100%;margin-top:8px;">Copier JSON</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CRITS = {
+  tech: [
+    { key:'t1', label:'Qualité image / résolution', sub:'Netteté, profondeur, rapport signal/bruit' },
+    { key:'t2', label:'Pertinence clinique', sub:'Couverture rétine, pédiatrie, pathologies cibles' },
+    { key:'t3', label:'Robustesse & fiabilité', sub:'Réputation terrain, durée de vie, incidents connus' },
+    { key:'t4', label:'Innovation & exclusivités', sub:'Brevets, fonctions uniques vs concurrence' },
+    { key:'t5', label:'Connectivité & logiciel', sub:'DICOM, DPI, export, IA intégrée' },
+  ],
+  org: [
+    { key:'o1', label:"Rapidité d'examen", sub:'Durée capture, préparation patient, résultat immédiat' },
+    { key:'o2', label:'Facilité de prise en main', sub:"Courbe d'apprentissage, formation requise" },
+    { key:'o3', label:'Encombrement & installation', sub:'Dimensions, contraintes pièce, câblage' },
+    { key:'o4', label:'Interface utilisateur', sub:'Ergonomie logiciel, lisibilité, fluidité' },
+    { key:'o5', label:'Délégation orthoptistes', sub:'Autonomie paramédicale possible' },
+  ],
+  biz: [
+    { key:'b1', label:'Rapport qualité / prix', sub:'Positionnement vs concurrents directs' },
+    { key:'b2', label:'Garantie & SAV', sub:'Durée, couverture pièces, délai intervention' },
+    { key:'b3', label:'Coûts récurrents', sub:'Maintenance annuelle, consommables, mises à jour' },
+    { key:'b4', label:'Options de financement', sub:'Leasing disponible, mensualités, option achat' },
+    { key:'b5', label:'Marge de négociation', sub:'Remise congrès, reprise ancien matériel, formations' },
+  ]
+};
+
+let ratings = {};
+let selectedPrio = 0;
+let savedEvals = [];
+
+function buildCrits(wrapperId, crits, type) {
+  const wrap = document.getElementById(wrapperId);
+  crits.forEach(cr => {
+    ratings[cr.key] = 0;
+    const div = document.createElement('div');
+    div.className = 'crit-row';
+    div.innerHTML = `
+      <div>
+        <div class="crit-text">${cr.label}</div>
+        <div class="crit-sub">${cr.sub}</div>
+      </div>
+      <div class="stars" id="stars-${cr.key}">
+        ${[1,2,3,4,5].map(i=>`<button class="star-btn" onclick="setRating('${cr.key}',${i},'${type}')">${i}</button>`).join('')}
+      </div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function setRating(key, val, type) {
+  ratings[key] = val;
+  const btns = document.querySelectorAll(`#stars-${key} .star-btn`);
+  btns.forEach((b,i) => {
+    b.classList.remove('on-tech','on-org','on-biz');
+    if(i < val) b.classList.add(`on-${type}`);
+  });
+  updateScores();
+}
+
+function avg(keys) {
+  const vals = keys.map(k=>ratings[k]).filter(v=>v>0);
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+}
+
+function updateScores() {
+  const t = avg(CRITS.tech.map(c=>c.key));
+  const o = avg(CRITS.org.map(c=>c.key));
+  const b = avg(CRITS.biz.map(c=>c.key));
+  const g = t*0.4 + o*0.3 + b*0.3;
+
+  document.getElementById('avg-tech').textContent = t ? t.toFixed(1) : '—';
+  document.getElementById('avg-org').textContent = o ? o.toFixed(1) : '—';
+  document.getElementById('avg-biz').textContent = b ? b.toFixed(1) : '—';
+  document.getElementById('bar-tech').style.width = (t/5*100)+'%';
+  document.getElementById('bar-org').style.width = (o/5*100)+'%';
+  document.getElementById('bar-biz').style.width = (b/5*100)+'%';
+  document.getElementById('lbl-tech').textContent = t ? t.toFixed(1) : '—';
+  document.getElementById('lbl-org').textContent = o ? o.toFixed(1) : '—';
+  document.getElementById('lbl-biz').textContent = b ? b.toFixed(1) : '—';
+  const gn = document.getElementById('global-num');
+  gn.textContent = g ? g.toFixed(1) : '—';
+  gn.className = 'global-num' + (g ? '' : ' empty');
+}
+
+function setPrio(btn, val) {
+  document.querySelectorAll('.prio-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPrio = val;
+}
+
+function saveEval() {
+  const name = document.getElementById('eq-name').value.trim();
+  if(!name){ showToast('Veuillez saisir le nom de l\'équipement'); return; }
+  const t = avg(CRITS.tech.map(c=>c.key));
+  const o = avg(CRITS.org.map(c=>c.key));
+  const b = avg(CRITS.biz.map(c=>c.key));
+  const g = t*0.4 + o*0.3 + b*0.3;
+  const prioLabels = ['','Tier 1 — Différenciant','Tier 2 — Standard','Tier 3 — Fonctionnel'];
+  const ev = {
+    id: Date.now(),
+    name, brand: document.getElementById('eq-brand').value.trim(),
+    cat: document.getElementById('eq-cat').value,
+    dest: document.getElementById('eq-dest').value,
+    price: document.getElementById('eq-price').value,
+    prio: selectedPrio, prioLabel: prioLabels[selectedPrio]||'',
+    notes: document.getElementById('eq-notes').value.trim(),
+    tech: +t.toFixed(2), org: +o.toFixed(2), biz: +b.toFixed(2),
+    global: +g.toFixed(2),
+    ratingsSnap: {...ratings},
+    time: new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
+  };
+  savedEvals.push(ev);
+  saveToStorage();
+  renderList();
+  updateShareTexts();
+  updateBadge();
+  resetForm();
+  switchTab('list');
+  showToast(`"${name}" enregistré !`);
+}
+
+function resetForm() {
+  document.getElementById('eq-name').value='';
+  document.getElementById('eq-brand').value='';
+  document.getElementById('eq-cat').value='';
+  document.getElementById('eq-dest').value='';
+  document.getElementById('eq-price').value='';
+  document.getElementById('eq-notes').value='';
+  selectedPrio=0;
+  document.querySelectorAll('.prio-btn').forEach(b=>b.classList.remove('selected'));
+  Object.keys(ratings).forEach(k=>{ ratings[k]=0; });
+  document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('on-tech','on-org','on-biz'));
+  updateScores();
+}
+
+function deleteEval(id) {
+  if(!confirm('Supprimer cette évaluation ?')) return;
+  savedEvals = savedEvals.filter(e=>e.id!==id);
+  saveToStorage();
+  renderList();
+  updateShareTexts();
+  updateBadge();
+}
+
+function clearAll() {
+  if(!savedEvals.length) return;
+  if(!confirm('Effacer toutes les évaluations ?')) return;
+  savedEvals=[];
+  saveToStorage();
+  renderList();
+  updateShareTexts();
+  updateBadge();
+}
+
+function renderList() {
+  const c = document.getElementById('eval-list-container');
+  const n = savedEvals.length;
+  document.getElementById('list-count-label').textContent = n + (n>1?' équipements évalués':' équipement évalué');
+  if(!n){
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Aucun équipement évalué.<br>Commencez par l'onglet "Évaluer".</div></div>`;
+    return;
+  }
+  const sorted = [...savedEvals].sort((a,b)=>b.global-a.global);
+  c.innerHTML = sorted.map((ev,i)=>{
+    const g = ev.global;
+    const cls = g>=4?'score-great':g>=3?'score-good':g>=2?'score-avg':'score-low';
+    const tags = [ev.cat,ev.dest,ev.prioLabel,ev.price?parseInt(ev.price).toLocaleString('fr-FR')+' €':''].filter(Boolean);
+    return `
+      <div class="eval-card">
+        <div class="eval-card-top">
+          <div class="eval-rank">${i+1}</div>
+          <div style="flex:1;margin-left:10px;">
+            <div class="eval-name">${ev.name}</div>
+            ${ev.brand?`<div class="eval-brand">${ev.brand}</div>`:''}
+          </div>
+          <div class="${cls} eval-global-score">${g.toFixed(1)}<span style="font-size:13px;opacity:0.5;">/5</span></div>
+        </div>
+        ${tags.length?`<div class="eval-meta">${tags.map(t=>`<span class="meta-tag">${t}</span>`).join('')}<span class="meta-tag" style="color:var(--text-hint);">${ev.time}</span></div>`:''}
+        <div class="eval-scores-row">
+          <div class="eval-score-chip chip-tech">Technique<br><strong>${ev.tech.toFixed(1)}</strong></div>
+          <div class="eval-score-chip chip-org">Organisation<br><strong>${ev.org.toFixed(1)}</strong></div>
+          <div class="eval-score-chip chip-biz">Business<br><strong>${ev.biz.toFixed(1)}</strong></div>
+        </div>
+        ${ev.notes?`<div class="eval-note">${ev.notes.substring(0,150)}${ev.notes.length>150?'…':''}</div>`:''}
+        <div class="eval-card-actions">
+          <button class="btn-danger-sm" onclick="deleteEval(${ev.id})">Supprimer</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateShareTexts() {
+  const sorted = [...savedEvals].sort((a,b)=>b.global-a.global);
+  if(!sorted.length){
+    document.getElementById('share-text').textContent='Aucune évaluation enregistrée.';
+    document.getElementById('json-text').textContent='Aucune donnée.';
+    return;
+  }
+  const txt = '📊 SFO 2025 — Évaluations équipements\n\n'+
+    sorted.map((e,i)=>`${i+1}. ${e.name}${e.brand?' ('+e.brand+')':''}\n   Score: ${e.global.toFixed(1)}/5 | Tech: ${e.tech.toFixed(1)} | Orga: ${e.org.toFixed(1)} | Biz: ${e.biz.toFixed(1)}\n   ${[e.cat,e.dest,e.prioLabel,e.price?parseInt(e.price).toLocaleString('fr-FR')+' €':''].filter(Boolean).join(' · ')}\n   ${e.notes||''}`.trim()).join('\n\n');
+  document.getElementById('share-text').textContent=txt;
+  document.getElementById('json-text').textContent=JSON.stringify(savedEvals,null,2);
+}
+
+function copyToClipboard() {
+  const t = document.getElementById('share-text').textContent;
+  navigator.clipboard.writeText(t).then(()=>showToast('Copié !')).catch(()=>showToast('Copier manuellement'));
+}
+
+function copyJson() {
+  const t = document.getElementById('json-text').textContent;
+  navigator.clipboard.writeText(t).then(()=>showToast('JSON copié !')).catch(()=>showToast('Copier manuellement'));
+}
+
+function shareWhatsApp() {
+  const t = document.getElementById('share-text').textContent;
+  const url = 'https://wa.me/?text='+encodeURIComponent(t);
+  window.open(url,'_blank');
+}
+
+function exportFull() {
+  if(!savedEvals.length){ showToast('Aucune évaluation à exporter'); return; }
+  const sorted = [...savedEvals].sort((a,b)=>b.global-a.global);
+  const critKeys = {tech:CRITS.tech,org:CRITS.org,biz:CRITS.biz};
+  let txt = '═══════════════════════════════════\n';
+  txt += 'RAPPORT SFO 2025 — ÉQUIPEMENTS\n';
+  txt += new Date().toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'\n';
+  txt += '═══════════════════════════════════\n\n';
+  sorted.forEach((ev,i)=>{
+    txt += `#${i+1} — ${ev.name.toUpperCase()}\n`;
+    if(ev.brand) txt += `Fabricant: ${ev.brand}\n`;
+    if(ev.cat) txt += `Catégorie: ${ev.cat}\n`;
+    if(ev.dest) txt += `Destination: ${ev.dest}\n`;
+    if(ev.price) txt += `Prix indicatif: ${parseInt(ev.price).toLocaleString('fr-FR')} €\n`;
+    if(ev.prioLabel) txt += `Priorité: ${ev.prioLabel}\n`;
+    txt += `\nSCORES\n`;
+    txt += `  Global   : ${ev.global.toFixed(1)} / 5\n`;
+    txt += `  Technique: ${ev.tech.toFixed(1)} / 5\n`;
+    txt += `  Orga     : ${ev.org.toFixed(1)} / 5\n`;
+    txt += `  Business : ${ev.biz.toFixed(1)} / 5\n`;
+    if(ev.ratingsSnap){
+      txt += `\nDÉTAIL TECHNIQUE\n`;
+      CRITS.tech.forEach(c=>{ txt += `  ${c.label}: ${ev.ratingsSnap[c.key]||0}/5\n`; });
+      txt += `DÉTAIL ORGANISATION\n`;
+      CRITS.org.forEach(c=>{ txt += `  ${c.label}: ${ev.ratingsSnap[c.key]||0}/5\n`; });
+      txt += `DÉTAIL BUSINESS\n`;
+      CRITS.biz.forEach(c=>{ txt += `  ${c.label}: ${ev.ratingsSnap[c.key]||0}/5\n`; });
+    }
+    if(ev.notes){ txt += `\nNOTES\n${ev.notes}\n`; }
+    txt += `\n───────────────────────────────────\n\n`;
+  });
+  const blob = new Blob([txt],{type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download='SFO2025_evaluations.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Rapport exporté !');
+}
+
+function importData() {
+  const raw = document.getElementById('import-input').value.trim();
+  if(!raw){ showToast('Collez du JSON d\'abord'); return; }
+  try {
+    const data = JSON.parse(raw);
+    const arr = Array.isArray(data) ? data : [data];
+    let added = 0;
+    arr.forEach(ev=>{
+      if(ev.name && ev.global!==undefined){
+        ev.id = Date.now() + Math.random();
+        ev.imported = true;
+        savedEvals.push(ev);
+        added++;
+      }
+    });
+    saveToStorage();
+    renderList();
+    updateShareTexts();
+    updateBadge();
+    document.getElementById('import-input').value='';
+    showToast(`${added} évaluation(s) importée(s) !`);
+  } catch(e) { showToast('JSON invalide — vérifiez le format'); }
+}
+
+function saveToStorage() {
+  try { localStorage.setItem('sfo2025_evals', JSON.stringify(savedEvals)); } catch(e){}
+}
+
+function loadFromStorage() {
+  try {
+    const d = localStorage.getItem('sfo2025_evals');
+    if(d) savedEvals = JSON.parse(d);
+  } catch(e){}
+}
+
+function updateBadge() {
+  const n = savedEvals.length;
+  document.getElementById('count-badge').textContent = n + (n>1?' éval.':' éval.');
+}
+
+function switchTab(tab) {
+  ['form','list','share'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach((b,i)=>{
+    const tabs = ['form','list','share'];
+    b.classList.toggle('active', tabs[i]===tab);
+  });
+  if(tab==='share') updateShareTexts();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// INIT
+buildCrits('crit-tech-wrap', CRITS.tech, 'tech');
+buildCrits('crit-org-wrap', CRITS.org, 'org');
+buildCrits('crit-biz-wrap', CRITS.biz, 'biz');
+loadFromStorage();
+renderList();
+updateBadge();
+updateShareTexts();
+</script>
+</body>
+</html>
